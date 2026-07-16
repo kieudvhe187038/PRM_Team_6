@@ -1,0 +1,85 @@
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BearShop Admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="admin-shell">
+            <aside class="admin-sidebar">
+                <div class="brand">
+                    <span class="brand-logo">🧸</span>
+                    <div>
+                        <div class="brand-name">BearShop</div>
+                        <div class="brand-sub">Trang quản trị</div>
+                    </div>
+                </div>
+                <nav class="nav flex-column admin-nav">
+                    <a class="nav-link @(currentController == "Dashboard" ? "active" : "")" asp-controller="Dashboard" asp-action="Index">
+                        <span class="nav-icon">📊</span> Tổng quan
+                    </a>
+                    <a class="nav-link @(currentController == "Products" ? "active" : "")" asp-controller="Products" asp-action="Index">
+                        <span class="nav-icon">📦</span> Sản phẩm
+                    </a>
+                    <a class="nav-link @(currentController == "Orders" ? "active" : "")" asp-controller="Orders" asp-action="Index">
+                        <span class="nav-icon">🧾</span> Đơn hàng
+                    </a>
+                    <a class="nav-link @(currentController == "Users" ? "active" : "")" asp-controller="Users" asp-action="Index">
+                        <span class="nav-icon">👥</span> Người dùng
+                    </a>
+                    <a class="nav-link @(currentController == "Chat" ? "active" : "")" asp-controller="Chat" asp-action="Index">
+                        <span class="nav-icon">💬</span> Tin nhắn
+                    </a>
+                </nav>
+            </aside>
+            <div class="admin-main">
+                <header class="admin-topbar">
+                    <h1 class="admin-title">@ViewData["Title"]</h1>
+                    <div class="admin-user">
+                        <span class="avatar">@(User.Identity!.Name!.Length > 0 ? User.Identity.Name[0].ToString().ToUpper() : "?")</span>
+                        <span class="admin-name">@User.Identity.Name</span>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link text-danger logout-btn" title="Đăng xuất">Đăng xuất</button>
+                        </form>
+                    </div>
+                </header>
+                <main class="admin-content">
+                    @if (TempData["Success"] is string success)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @success
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    @if (TempData["Error"] is string error)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    }
+    else
+    {
+        @RenderBody()
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
