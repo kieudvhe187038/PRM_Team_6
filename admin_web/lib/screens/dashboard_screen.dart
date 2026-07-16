@@ -125,13 +125,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         maxLines: 1,
                                       ),
                                       const SizedBox(height: 4),
-                                      FractionallySizedBox(
-                                        heightFactor: heightPct.clamp(0.02, 1.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: kPrimary,
-                                            borderRadius: const BorderRadius.vertical(
-                                              top: Radius.circular(6),
+                                      Expanded(
+                                        child: FractionallySizedBox(
+                                          heightFactor: heightPct.clamp(0.02, 1.0),
+                                          alignment: Alignment.bottomCenter,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: kPrimary,
+                                              borderRadius: const BorderRadius.vertical(
+                                                top: Radius.circular(6),
+                                              ),
                                             ),
                                           ),
                                         ),
