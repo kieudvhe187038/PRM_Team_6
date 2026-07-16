@@ -181,6 +181,45 @@ flutter build apk --release      # build APK nộp bài
 > Android đã bật cleartext cho `10.0.2.2`/`localhost` (file
 > `frontend/android/app/src/main/res/xml/network_security_config.xml`).
 
+## Cài đặt và sử dụng file APK trên điện thoại
+
+**1. Lấy file APK** — có sẵn tại [`releases/BearShop-v1.0.apk`](releases/BearShop-v1.0.apk)
+trong repo (tải trực tiếp về điện thoại hoặc máy tính). Nếu muốn tự build lại
+(vd sau khi đổi địa chỉ backend ở bước 2):
+```bash
+cd frontend
+flutter pub get
+flutter build apk --release
+```
+File build ra tại `frontend/build/app/outputs/flutter-apk/app-release.apk`
+(thư mục `build/` không commit vào Git — chỉ bản trong `releases/` là commit).
+
+**2. Trỏ app về đúng backend trước khi build (bắt buộc khi cài trên điện thoại
+thật, không phải emulator):**
+- Mở `frontend/lib/services/api_service.dart`, sửa dòng
+  `if (Platform.isAndroid) return '10.0.2.2';` thành địa chỉ IP LAN thật của
+  máy đang chạy backend, ví dụ `return '192.168.1.5';` (`10.0.2.2` chỉ hiểu
+  được trên Android Emulator, điện thoại thật không dùng được địa chỉ này).
+- Xem IP LAN của máy chạy backend bằng `ipconfig` (tìm dòng `IPv4 Address`).
+- Điện thoại và máy chạy backend phải cùng một mạng Wi-Fi.
+- Build lại APK sau khi sửa (bước 1).
+
+**3. Cài đặt APK trên điện thoại Android:**
+- Copy file `app-release.apk` sang điện thoại (dây USB, Zalo, Google Drive,
+  email...).
+- Mở file APK trên điện thoại → Android sẽ hỏi cho phép **"Cài đặt ứng dụng
+  không rõ nguồn gốc" (Install unknown apps)** cho ứng dụng dùng để mở file
+  (Trình quản lý file/Zalo/Drive...) → bật quyền đó.
+- Chọn **Cài đặt (Install)** → chờ xong → **Mở (Open)**.
+
+**4. Sử dụng:**
+- Chạy backend trước (`dotnet run` trong `backend/BearShop.Api`) và đảm bảo
+  Tường lửa Windows cho phép kết nối tới cổng `5095` từ mạng LAN.
+- Mở app trên điện thoại, đăng nhập bằng tài khoản ở mục **Tài khoản test**
+  bên dưới (`demo@bearshop.vn` / `123456`) hoặc đăng ký tài khoản mới.
+- Duyệt sản phẩm, thêm giỏ hàng, đặt hàng (COD/chuyển khoản/VNPay), xem lịch
+  sử đơn, nhận thông báo, chat với shop, xem bản đồ cửa hàng...
+
 ## Tài khoản test
 | Vai trò | Email | Mật khẩu | Ghi chú |
 |---|---|---|---|
