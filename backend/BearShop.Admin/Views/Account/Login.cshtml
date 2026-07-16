@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "_Layout";
+}
+
+<div class="login-page">
+    <div class="login-card">
+        <div class="text-center mb-3">
+            <div class="login-logo mx-auto">🧸</div>
+            <h4 class="fw-bold mb-0">BearShop Admin</h4>
+            <div class="text-muted small">Đăng nhập để quản lý cửa hàng</div>
+        </div>
+
+        <form asp-controller="Account" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            @Html.AntiForgeryToken()
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger py-2">
+                    <div asp-validation-summary="All" class="mb-0"></div>
+                </div>
+            }
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="admin@bearshop.vn" required autofocus />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mật khẩu</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        </form>
+    </div>
+</div>
