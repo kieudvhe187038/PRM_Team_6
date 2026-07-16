@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cho phép gọi HTTP (cleartext) tới backend .NET trong môi trường dev.
+     10.0.2.2 là địa chỉ máy host nhìn từ Android Emulator. -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+    </domain-config>
+</network-security-config>
