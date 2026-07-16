@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,7 @@ class ChatDetailScreen extends StatefulWidget {
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   final _textCtrl = TextEditingController();
+  Timer? _pollTimer;
   bool _sending = false;
 
   @override
@@ -26,10 +29,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ChatProvider>().loadConversation(widget.customerId);
     });
+    _pollTimer = Timer.periodic(const Duration(seconds: 4), (_) {
+      context.read<ChatProvider>().loadConversation(widget.customerId);
+    });
   }
 
   @override
   void dispose() {
+    _pollTimer?.cancel();
     _textCtrl.dispose();
     super.dispose();
   }
