@@ -1,0 +1,55 @@
+@model List<ProductDto>
+@{
+    ViewData["Title"] = "Sản phẩm";
+}
+
+<div class="admin-card">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="fw-bold">Danh sách sản phẩm (@Model.Count)</div>
+        <a class="btn btn-primary btn-sm" asp-action="Create">+ Thêm sản phẩm</a>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="text-muted text-center py-5">Chưa có sản phẩm nào</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th class="text-end">Giá</th>
+                        <th class="text-end">Tồn kho</th>
+                        <th class="text-end">Đã bán</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td><img src="@p.ImageUrl" alt="" style="width:44px;height:44px;object-fit:cover;border-radius:10px;" onerror="this.src='https://placehold.co/44x44?text=%F0%9F%A7%B8'" /></td>
+                            <td>@p.Name</td>
+                            <td>@p.Category</td>
+                            <td class="text-end">@Formatters.Vnd(p.Price)</td>
+                            <td class="text-end">@p.Stock</td>
+                            <td class="text-end">@p.Sold</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@p.Id">Sửa</a>
+                                <form asp-action="Delete" asp-route-id="@p.Id" method="post" class="d-inline"
+                                      onsubmit="return confirm('Xóa sản phẩm &quot;@p.Name&quot;?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
