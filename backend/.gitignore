@@ -1,0 +1,15 @@
+## .NET
+bin/
+obj/
+*.user
+*.db
+*.db-shm
+*.db-wal
+
+## Secrets (real Jwt/VnPay keys live here for local dev)
+appsettings.Development.json
+
+## IDE
+.vs/
+.idea/
+*.suo
