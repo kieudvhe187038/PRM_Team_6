@@ -1,0 +1,55 @@
+@model List<OrderDto>
+@{
+    ViewData["Title"] = "Đơn hàng";
+}
+
+<div class="admin-card">
+    <div class="fw-bold mb-3">Danh sách đơn hàng (@Model.Count)</div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="text-muted text-center py-5">Chưa có đơn hàng nào</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Ngày đặt</th>
+                        <th>Người nhận</th>
+                        <th>Địa chỉ</th>
+                        <th>Thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th class="text-end">Tổng tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var o in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">@o.Code</td>
+                            <td class="small">@Formatters.DateTime(o.CreatedAt)</td>
+                            <td>@o.ReceiverName</td>
+                            <td style="max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@o.Address</td>
+                            <td class="small">@o.PaymentMethod</td>
+                            <td>
+                                <form asp-action="UpdateStatus" asp-route-id="@o.Id" method="post" class="d-flex align-items-center gap-1">
+                                    @Html.AntiForgeryToken()
+                                    <select name="status" class="form-select form-select-sm @OrderStatuses.BadgeClass(o.Status)" style="width: auto;" onchange="this.form.submit()">
+                                        @foreach (var s in OrderStatuses.All)
+                                        {
+                                            <option value="@s" selected="@(s == o.Status)">@OrderStatuses.Label(s)</option>
+                                        }
+                                    </select>
+                                </form>
+                            </td>
+                            <td class="text-end fw-bold" style="color: var(--bear-primary);">@Formatters.Vnd(o.Total)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
