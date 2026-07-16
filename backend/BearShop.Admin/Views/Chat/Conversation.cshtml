@@ -1,0 +1,37 @@
+@model List<ChatMessageDto>
+@{
+    var customerId = (int)ViewData["CustomerId"]!;
+    ViewData["Title"] = "Tin nhắn - " + ViewData["CustomerName"];
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="text-decoration-none">&larr; Quay lại danh sách hội thoại</a>
+</div>
+
+<div class="admin-card">
+    <div class="fw-bold mb-3">@ViewData["CustomerName"]</div>
+
+    <div class="d-flex flex-column mb-3" style="max-height: 480px; overflow-y: auto;">
+        @if (Model.Count == 0)
+        {
+            <div class="text-muted text-center py-5">Chưa có tin nhắn nào</div>
+        }
+        else
+        {
+            @foreach (var m in Model)
+            {
+                var mine = m.SenderRole == "Admin";
+                <div class="chat-bubble @(mine ? "mine" : "theirs")">
+                    <div>@m.Text</div>
+                    <div class="small @(mine ? "text-white-50" : "text-muted") mt-1">@Formatters.DateTime(m.CreatedAt)</div>
+                </div>
+            }
+        }
+    </div>
+
+    <form asp-action="Reply" asp-route-customerId="@customerId" method="post" class="d-flex gap-2">
+        @Html.AntiForgeryToken()
+        <input type="text" name="text" class="form-control" placeholder="Nhập tin nhắn trả lời..." required autocomplete="off" />
+        <button type="submit" class="btn btn-primary">Gửi</button>
+    </form>
+</div>

@@ -1,0 +1,30 @@
+@model List<ConversationDto>
+@{
+    ViewData["Title"] = "Tin nhắn";
+}
+
+<div class="admin-card">
+    <div class="fw-bold mb-3">Hội thoại với khách hàng (@Model.Count)</div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="text-muted text-center py-5">Chưa có tin nhắn nào</div>
+    }
+    else
+    {
+        <ul class="list-group list-group-flush conversation-list">
+            @foreach (var c in Model)
+            {
+                <li class="list-group-item">
+                    <a asp-action="Conversation" asp-route-customerId="@c.CustomerId" class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">@c.CustomerName</div>
+                            <div class="text-muted small text-truncate" style="max-width: 480px;">@c.LastMessage</div>
+                        </div>
+                        <div class="text-muted small">@Formatters.DateTime(c.LastMessageAt)</div>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+</div>
